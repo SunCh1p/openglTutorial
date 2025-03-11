@@ -15,15 +15,23 @@ set(GLFW_ROOT ${CMAKE_SOURCE_DIR}/external/glfw)
 #add_subdirectory(external/glfw)
 
 #define glfw as an imported static library
-add_library(glfw STATIC IMPORTED)
-set_target_properties(glfw PROPERTIES 
-  IMPORTED_LOCATION "${GLFW_ROOT}/build/src/libglfw3.a"
-  INTERFACE_INCLUDE_DIRECTORIES "${GLFW_ROOT}/include"
-)
+# add_library(glfw STATIC IMPORTED)
+# set_target_properties(glfw PROPERTIES 
+#   IMPORTED_LOCATION "${GLFW_ROOT}/build/src/libglfw3.a"
+#   INTERFACE_INCLUDE_DIRECTORIES "${GLFW_ROOT}/include"
+# )
+
+add_subdirectory(external/glfw)
 
 add_executable(openglTutorial ${SOURCES})
 
 # Add the include directory for glad.h and glfw
 target_include_directories(openglTutorial PRIVATE ${CMAKE_SOURCE_DIR}/include ${GLFW_ROOT}/include)
-target_link_libraries(openglTutorial glfw OpenGL::GL)
+# target_link_libraries(openglTutorial glfw OpenGL::GL)
+if (WIN32)
+  target_link_libraries(openglTutorial glfw opengl32)
+else()
+  target_link_libraries(openglTutorial glfw OpenGL::GL)
+endif()
+
 
